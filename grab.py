@@ -28,24 +28,32 @@ if args["account"]:
 if args["percentage"]:
 	percentage = format(args["percentage"])
 
-print '[INFO] Extracting ' + percentage + '% of the followers from ' + targetAccount
+print ('[INFO] Extracting ' + percentage + '% of the followers from ' + targetAccount)
 
 # get an InstaPy session!
 # set headless_browser=True to run InstaPy in the background
 session = InstaPy(username=insta_username,
                   password=insta_password,
-                  headless_browser=True)
+                  headless_browser=False)
 
-print '[INFO]: Logging in..'
+print('[INFO]: Logging in..')
 with smart_run(session):
 	#get follower, following count
 	followers_count, following_count = get_relationship_counts(session.browser, targetAccount, session.logger)
 	amount = getPercentageCount(int(followers_count),int(percentage))
-	print '[INFO] Going to extract ' + str(amount) + ' followers out of ' + str(followers_count)
+	print('[INFO] Going to extract ' + str(amount) + ' followers out of ' + str(followers_count))
 
 	followers_list = session.grab_followers(username=targetAccount, amount=amount, live_match=True, store_locally=False)
+	
+#	to actually follow the users
 
-	print '[INFO]: Followers grabbed successfully. Saving to file..'
+# 	if isinstance(followers_list,list):
+# 		print('starting follows')
+# 		session.set_skip_users(skip_private=False)
+# 		session.follow_by_list(followers_list,times=1,sleep_delay=60,interact=False)
+
+
+	print('[INFO]: Followers grabbed successfully. Saving to file..')
 
 	result = ''
 	for el in followers_list:
